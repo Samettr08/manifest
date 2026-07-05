@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NopusVault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ░░ MATRIX BACKGROUND ░░ -->
+<div id="bg-matrix"></div>
+<div id="bg-overlay"></div>
+
+<!-- ░░ OFFLINE OVERLAY ░░ -->
+<div id="offline-screen" class="hidden">
+    <div class="offline-box">
+        <div class="offline-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="22" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+                <path d="M16 24 C16 19.6 19.6 16 24 16 C28.4 16 32 19.6 32 24" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M19 27.5 C19 25 21.2 23 24 23 C26.8 23 29 25 29 27.5" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="24" cy="32" r="2" fill="#ef4444"/>
+                <line x1="8" y1="8" x2="40" y2="40" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h2>Sistem Bakımda</h2>
+        <p>NopusVault şu anda çevrimdışı. Bakım tamamlandığında tekrar erişebilirsiniz.</p>
+        <div class="offline-status">
+            <span class="os-dot"></span>
+            <span>OFFLINE — Bakım Modu</span>
+        </div>
+        <button onclick="location.reload()" class="offline-retry">Yenile</button>
+    </div>
+</div>
+
+
+
+<!-- ░░ APP ░░ -->
+<div id="app" style="display:none">
+
+    <!-- HEADER -->
+    <header>
+        <div class="hdr">
+            <div class="hdr-brand">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#hg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <circle cx="12" cy="10" r="2.5"/>
+                    <path d="M12 12.5v5h1.5m-1.5-2h1.5"/>
+                    <defs>
+                        <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff4d4d"/>
+                            <stop offset="100%" stop-color="#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Nopus<em>Vault</em></span>
+            </div>
+
+            <nav>
+                <button class="nav-btn active" data-page="home">Ana Sayfa</button>
+                <button class="nav-btn" data-page="search">Arama</button>
+                <button class="nav-btn" data-page="stats">İstatistik</button>
+            </nav>
+
+            <div class="hdr-right">
+                <div class="sys-status" id="sys-status" style="border:none; background:none; padding:0;">
+                    <div id="status-dot" class="status-dot online" style="width:auto; height:auto; background:none; box-shadow:none; display:flex; align-items:center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px; height:20px; filter: drop-shadow(0 0 4px rgba(34,197,94,0.4))">
+                            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                            <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                            <line x1="12" y1="20" x2="12.01" y2="20" stroke-width="3"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── HOME PAGE ── -->
+    <div id="page-home" class="page active">
+        <div class="home-wrap">
+            <!-- Hero -->
+            <div class="home-hero">
+                <div class="hero-glow"></div>
+                <h1>Nopus<span>Vault</span></h1>
+                <p>Steam depot key kütüphanesi & manifest jeneratörü</p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="sum-card">
+                    <div class="sum-icon blue">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M10 2L2 6v8l8 4 8-4V6L10 2zM2 6l8 4 8-4M10 10v10"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val" id="sum-depots">—</div>
+                        <div class="sum-lbl">Toplam Depot</div>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-icon purple">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val" id="sum-games">—</div>
+                        <div class="sum-lbl">Tahmini Oyun</div>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-icon green">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M10 2L2 6v8l8 4 8-4V6L10 2zM2 6l8 4 8-4M10 10v10"/>
+                            <path d="M6 14l2 2 6-6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val" id="sum-dlc">—</div>
+                        <div class="sum-lbl">DLC Desteği</div>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-icon orange">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M4 2h8l4 4v12a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/>
+                            <path d="M12 2v5h5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val" id="sum-manifest">Lua</div>
+                        <div class="sum-lbl">Manifest Format</div>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-icon" id="sys-icon-card" style="background:rgba(52,211,153,0.1);color:#34d399">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <circle cx="10" cy="10" r="8"/>
+                            <path d="M7 10l2 2 4-4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val" id="sum-status">Online</div>
+                        <div class="sum-lbl">Sistem Durumu</div>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-icon cyan">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <rect x="2" y="4" width="16" height="12" rx="2"/>
+                            <path d="M6 8h8M6 12h5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sum-val">JSON</div>
+                        <div class="sum-lbl">Depot Format</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <!-- Informative Section -->
+            <div class="info-section" style="margin-top: 30px; padding: 24px; background: var(--card); border: 1px solid var(--line2); color: var(--text1);">
+                <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 18px; color: var(--blue);">NopusVault Nedir & Nasıl Kullanılır?</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: var(--text2); margin-bottom: 16px;">
+                    NopusVault, Steam oyunları için şifrelenmiş depot anahtarlarını (depot keys) sorgulamanızı ve bu anahtarlardan 
+                    otomatik olarak indirilebilir Lua manifest dosyaları üretmenizi sağlayan yerel ve güvenli bir platformdur.
+                </p>
+                <div class="info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+                    <div class="info-card" style="padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);">
+                        <h4 style="margin: 0 0 8px 0; color: var(--green); font-size: 14px;">1. Oyunu Arayın</h4>
+                        <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--text3);">
+                            Üst menüdeki "Arama" sekmesine giderek oyunun adını veya Steam App ID'sini yazarak arama yapabilirsiniz.
+                        </p>
+                    </div>
+                    <div class="info-card" style="padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);">
+                        <h4 style="margin: 0 0 8px 0; color: var(--purple); font-size: 14px;">2. Manifest Oluşturun</h4>
+                        <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--text3);">
+                            Oyun detayları yüklendiğinde, "Manifest" sekmesine tıklayarak tek tıkla cihazınıza uygun formatta Lua kodu alabilirsiniz.
+                        </p>
+                    </div>
+                    <div class="info-card" style="padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);">
+                        <h4 style="margin: 0 0 8px 0; color: var(--orange); font-size: 14px;">3. DLC & Depot Listesi</h4>
+                        <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--text3);">
+                            Oyunun tüm alt paketleri, eklentileri (DLC) ve depot anahtarları veri tabanından yerel olarak süzülüp listelenir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── SEARCH PAGE ── -->
+    <div id="page-search" class="page">
+        <div class="search-page-wrap">
+
+            <!-- Search Bar -->
+            <div class="sp-search-area">
+                <div class="sp-search-box" id="sp-search-box">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="6"/><path d="M15 15l3 3"/></svg>
+                    <input id="sp-input" type="text" placeholder="Oyun adı veya Steam App ID..." autocomplete="off">
+                    <button class="sp-clear" id="sp-clear">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L4 10M4 4l6 6"/></svg>
+                    </button>
+                    <button class="sp-btn" id="sp-btn">Ara</button>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div id="sp-result">
+
+                <!-- Welcome -->
+                <div class="sp-state" id="sp-welcome">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="rgba(56,189,248,0.15)" stroke-width="1.5"/><circle cx="22" cy="22" r="9" stroke="#38bdf8" stroke-width="1.5"/><line x1="28.5" y1="28.5" x2="36" y2="36" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/></svg>
+                    <p>Oyun adı veya Steam App ID girerek arama yapın</p>
+                </div>
+
+                <!-- Loading -->
+                <div class="sp-state hidden" id="sp-loading">
+                    <div class="sp-spinner"></div>
+                    <p id="sp-loading-msg">Aranıyor...</p>
+                </div>
+
+                <!-- Error -->
+                <div class="sp-state hidden" id="sp-error">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="rgba(239,68,68,0.2)" stroke-width="1.5"/><path d="M17 17l14 14M31 17L17 31" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+                    <p id="sp-error-msg">Oyun bulunamadı.</p>
+                    <button class="btn-sm" id="sp-retry">Tekrar Dene</button>
+                </div>
+
+                <!-- Game Card -->
+                <div id="game-card" class="hidden">
+
+                    <!-- Game Header -->
+                    <div class="gc-header">
+                        <div class="gc-img-wrap">
+                            <img id="gc-img" src="" alt="">
+                        </div>
+                        <div class="gc-info">
+                            <div class="gc-tags" id="gc-tags"></div>
+                            <h2 id="gc-name">—</h2>
+                            <div class="gc-meta" id="gc-meta"></div>
+                            <div class="gc-actions">
+                                <button class="btn-primary" id="btn-dl">
+                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v8M5 7l3 3 3-3M2 13h12" stroke-linecap="round"/></svg>
+                                    NopusManifest İndir
+                                </button>
+                                <a class="btn-secondary" id="btn-steam" href="#" target="_blank">
+                                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7.977 14.969c.086.012.18-.002.268-.021l3.968-2.825a2.584 2.584 0 0 0 1.642-2.42c0-1.085-.668-2.015-1.617-2.408l.102-1.652a1.59 1.59 0 0 0-.295-1.05 1.583 1.583 0 0 0-1.08-.567l-2.23-.321a2.384 2.384 0 0 0-2.251-1.557 2.395 2.395 0 0 0-2.392 2.392c0 1.096.74 2.023 1.748 2.298l-.1 1.643a3.161 3.161 0 0 0-1.573.493L.486 6.136A8.04 8.04 0 0 1 7.977.031c4.444 0 8.053 3.606 8.053 8.051 0 3.553-2.3 6.57-5.5 7.632l-2.553-1.745zM4.4 10.5a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1z"/></svg>
+                                    Steam'de Gör
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="gc-tabs">
+                        <button class="gc-tab active" data-tab="depot">Depot Keys</button>
+                        <button class="gc-tab" data-tab="dlc">DLC <span class="tab-count" id="tab-dlc-count">0</span></button>
+                        <button class="gc-tab" data-tab="manifest">Manifest</button>
+                        <button class="gc-tab" data-tab="sysreq">Sistem</button>
+                        <button class="gc-tab" data-tab="desc">Açıklama</button>
+                        <button class="gc-tab" data-tab="screens">Görseller</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="tab-content">
+
+                        <!-- Depot -->
+                        <div id="tc-depot" class="tc active">
+                            <div class="tc-toolbar">
+                                <span class="tc-count" id="depot-found-count">0 depot bulundu</span>
+                                <button class="btn-sm" id="btn-copy-all-dk">Tümünü Kopyala</button>
+                            </div>
+                            <div class="dk-list" id="dk-list"></div>
+                        </div>
+
+                        <!-- DLC -->
+                        <div id="tc-dlc" class="tc">
+                            <div class="dlc-list" id="dlc-list"></div>
+                        </div>
+
+                        <!-- Manifest -->
+                        <div id="tc-manifest" class="tc">
+                            <div class="tc-toolbar">
+                                <span class="tc-count">NopusManifest.lua önizleme</span>
+                                <button class="btn-sm" id="btn-copy-manifest">Kopyala</button>
+                            </div>
+                            <div class="manifest-box">
+                                <pre id="manifest-pre"></pre>
+                            </div>
+                        </div>
+
+                        <!-- SysReq -->
+                        <div id="tc-sysreq" class="tc">
+                            <div class="sr-toggle">
+                                <button class="sr-btn active" data-sr="min">Minimum</button>
+                                <button class="sr-btn" data-sr="rec">Önerilen</button>
+                            </div>
+                            <div id="sr-min" class="sr-body"></div>
+                            <div id="sr-rec" class="sr-body hidden"></div>
+                        </div>
+
+                        <!-- Description -->
+                        <div id="tc-desc" class="tc">
+                            <div class="tc-toolbar">
+                                <span class="tc-count" id="tr-status">Çeviri yükleniyor...</span>
+                            </div>
+                            <div class="desc-body" id="desc-body"></div>
+                        </div>
+
+                        <!-- Screenshots -->
+                        <div id="tc-screens" class="tc">
+                            <div class="screens-grid" id="screens-grid"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STATS PAGE ── -->
+    <div id="page-stats" class="page">
+        <div class="stats-wrap">
+            <h2>İstatistikler</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Toplam Depot Key</div>
+                    <div class="stat-val blue" id="st-depots">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Tahmini Oyun Sayısı</div>
+                    <div class="stat-val purple" id="st-games">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">DLC Desteği</div>
+                    <div class="stat-val green" id="st-dlc">Steam API</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Manifest Format</div>
+                    <div class="stat-val orange">Lua 5.4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Sistem Durumu</div>
+                    <div class="stat-val" id="st-status">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Dosya Boyutu</div>
+                    <div class="stat-val cyan">~15.3 MB</div>
+                </div>
+            </div>
+
+            <div class="range-section">
+                <div class="section-title">ID Dağılımı</div>
+                <div id="range-bars"></div>
+            </div>
+
+            <div class="recent-section">
+                <div class="section-title">Son Aramalar</div>
+                <div id="recent-list"><p class="empty-p">Henüz arama yapılmadı.</p></div>
+            </div>
+
+            <div class="status-section" style="display:none">
+                <div class="section-title">GitHub Sistem Durumu</div>
+                <div class="status-detail" id="status-detail">
+                    <div class="sd-row">
+                        <span>Kaynak</span>
+                        <a href="https://github.com/Samettr08/bak-m/blob/main/https.docs" target="_blank" rel="noopener" class="sd-link">github.com/Samettr08/bak-m</a>
+                    </div>
+                    <div class="sd-row">
+                        <span>Dosya</span>
+                        <span class="sd-val">https.docs</span>
+                    </div>
+                    <div class="sd-row">
+                        <span>Stats değeri</span>
+                        <span class="sd-val" id="sd-stats-val">—</span>
+                    </div>
+                    <div class="sd-row">
+                        <span>Son Kontrol</span>
+                        <span class="sd-val" id="sd-last-check">—</span>
+                    </div>
+                    <div class="sd-row">
+                        <span>Durum</span>
+                        <span class="sd-val" id="sd-result">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /app -->
+
+<!-- Modal -->
+<div id="ss-modal" class="modal hidden">
+    <div class="modal-bg" id="modal-bg"></div>
+    <div class="modal-inner">
+        <button class="modal-close" id="modal-close"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 3L3 11M3 3l8 8"/></svg></button>
+        <button class="modal-nav modal-prev" id="modal-prev"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L6 8l4 4"/></svg></button>
+        <img id="modal-img" src="" alt="">
+        <button class="modal-nav modal-next" id="modal-next"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg></button>
+        <div class="modal-count" id="modal-count">1 / 1</div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l3 3 7-7"/></svg>
+    <span id="toast-msg">Kopyalandı!</span>
+</div>
+
+<!-- Download overlay -->
+<div id="dl-overlay" class="dl-overlay hidden">
+    <div class="dl-box">
+        <div class="dl-anim">
+            <div class="dl-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="url(#dlg)" stroke-width="2" class="dl-arrow">
+                <defs><linearGradient id="dlg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs>
+                <path d="M12 3v12M8 11l4 4 4-4M3 18h18" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="dl-info">
+            <div class="dl-name" id="dl-name">NopusManifest.lua</div>
+            <div class="dl-bar-wrap"><div class="dl-bar" id="dl-bar"></div></div>
+            <div class="dl-step" id="dl-step">Hazırlanıyor...</div>
+        </div>
+    </div>
+</div>
+
+    <script src="app.js?v=5"></script>
+</body>
+</html>
